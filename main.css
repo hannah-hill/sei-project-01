@@ -1,0 +1,56 @@
+* {
+  box-sizing: border-box;
+}
+header {
+  text-align: center;
+  height: 100px;
+}
+body {
+  background-color: black;
+  color: limegreen;
+  font-family: monospace;
+}
+
+/* -----MAIN STYLING - FLEXBOX CONTAINER----- */
+main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  margin-bottom: 100px;
+}
+
+/* -----GRID SYLING----- */
+.grid {
+  border: 1px solid white;
+  height: 400px;
+  width: 600px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+
+  gap: 0px;
+}
+.grid div {
+  border: 1px solid white;
+  height: 50px;
+  width: 50px;
+}
+.scoreboard {
+  border: 2px solid white;
+  height: 200px;
+  width: 400px;
+  display: flex;
+  flex-flow: wrap column;
+  align-items: flex-start;
+  padding: 20px;
+  font-size: 20px;
+}
+
+/* -----PLAYER STYLING----- */
+.active-player {
+  background-color: fuchsia;
+}
+
+/* -----ALIEN STYLING----- */
+.alien {
+  background-color: limegreen;
+}

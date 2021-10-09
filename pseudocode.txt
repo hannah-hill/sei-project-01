@@ -1,0 +1,117 @@
+///// HTML /////
+HEAD
+    title
+HEADER
+    <h1> Space Invaders </h1>
+BODY
+    MAIN
+        div.grid
+        div.scoreboard
+            p.scoreTitle + span.score 
+            p.lives + div.lives-container
+    DIV
+        div.leaderboard
+            <h2>Leaderboard</h2>
+Head obvs dont forget to include title element, and then link to css.
+Header will just contain an h1 with Space Invaders.
+Body contains a MAIN element, which will be a flexbox. MAIN will have 2 div children: 1) for the game grid,
+which will be built with JS, and 2) for the scoreboard container. The div.scoreboard will have two div children
+1) containing p.scoreTitle and span.score, 2) containing p.lives and div.lives-container for images of lives 
+remaining.
+
+EXTRA
+potentially then a div below main for a leaderboard (need time to learn localStorage)
+
+
+///// JAVASCRIPT /////
+/// BUILD GRID
+*****TBD*****The grid will be 12 rows by 18 columns. Rows one through 6 will contain 11 aliens per row. 
+Rows 7 through 10 will be empty, and aliens will move slowly down into them. Row 11 will contain 4x 
+obstacles made up of 2 cells, with 2 cells around and between each obstacle. Row 12 will be empty
+so the player cannon can be added.
+Query select .grid div in DOM.
+Create const arrays for rows - invadersRow, emptyRow, barrierRow, playerRow (i.e. Array.from({length: 18})
+.fill('empty')).
+Concat rows to create const gameGrid, then forEach(className, i) create div, append to main grid.
+Create a const array of all grid divs using document.querySelectorAll(.grid div) (const allCells)
+
+/// POSITION PLAYER
+Create an const array playerCells for the player row grid cells = Array.from(allCells).filter(cell => {
+    return cell.classList.contains('player')
+})
+Set player start position - attach .activePlayer class to the middle cell of playerCells .
+Store player start position to const playerIndex.
+
+/// HANDLE PLAYER MOVEMENT
+Create a movePlayer function with paramaters for changeInIndex (arguments either 1 or -1) 
+and for .
+Inside create const newIndex = playerIndex + changeInIndex.
+if player is on the edge, return to exit the function.
+otherwise, call move function with newIndex as an argument.
+
+function move(newIndex) playerCells[playerIndex].classList.remove('activePlayer`)
+
+Create handleArrowLeft() and handleArrowRight() functions. The former will pass -1 into the 
+movePlayer function, while the latter will pass in 1. Both functions will also have functions to 
+check whether the player is at the left or right boundary of  playerCells, and pass the result
+into the movePlayer function. 
+Add event listener to keydown and add a switch statement for ArrowLeft and ArrowRight, to execute handlers.
+
+/// POSITION INVADER
+MVP - start with one invader. 
+set invader start positions within the invadersRow
+
+
+/// MOVE INVADERS
+Create three functions for the invaders movement - moveInvaderRight. moveInvaderRight, and moveIndaderDown.
+MoveInvaderRight, forEach assign invaderIndex and move index right,left, or down.
+setInterval to move at an interval
+Switch between functions when they hit boundaries, moveDown and then move right or left.
+If any cell in the barrier Row has an invader class assigned, lose a life and reset game to start positions.
+
+OR
+
+set invaders positions then target invader block as a div,
+
+OR
+Use setInterval to set fixed movements, x times to the left then down, x times to the right then dow,
+
+/// CREATE NEW ALIEN WAVE
+If no cells contain invader class, reset invaders start positions and repeat invaders movement
+
+/// SHOOT INVADERS
+Keydown event listener for space bar 
+Add .shoot class to cell above (if it is .empty) and move up until it collides with something.
+If it collides with .invader, then run a killInvader function to change the cell to .empty
+Increase score by increment
+
+
+BOMB PLAYER
+Assign a random invader index from bottom row and a random time interval.
+Create a bombPlayer function where a .bomb class is assigned to the cell below the random invader.
+While the cell has the class .empty, add and remove the .bomb class to cells in the same column to move 
+the bomb down.
+If the .bomb class is assigned to a cell with the .activePlayer class, lose a life.
+SetInterval bombPlayer, randomInterval
+
+/// ENDGAME
+If player lives reaches 0, then run endgame function.
+Use DOM to add a div to body with a .pop-up class to the screen, add a p to the div with GAME OVER innerText
+and add a p with the player's final score.
+Ask if they want to play again, button -> if click yes then reset game.
+
+
+
+
+EXTRAS
+Add in barrier row with 4x 2-length barriers for the spaceship to hide behind.
+If .bomb is assigned to .barrier cell, then change the .barrier class to be something like .barrier-half
+and then if .barrier half is hit by .bomb, change the class to .empty.
+
+Speed up the invaders on the fresh wave, reduce the interval for the invader movement and shrink the 
+randomInterval for dropping bombs.
+
+Different kinds of invaders with different scores.
+
+The bonus invader ship that appears randomly across the top.
+

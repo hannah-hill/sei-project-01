@@ -24,7 +24,6 @@ const alienRow = [
   "space",
   "space",
 ]
-console.log(alienRow.length)
 
 const gridMap = spaceRow
   .concat(spaceRow)
@@ -96,6 +95,8 @@ document.addEventListener("keydown", function (event) {
 })
 
 ///// INITIALISING THE ALIENS
+let rightInterval
+let leftInterval
 const spaceCells = Array.from(allGridCells).filter((cell) =>
   cell.classList.contains("space")
 )
@@ -106,18 +107,35 @@ alienStartIndex.classList.add("alien")
 let alienIndex = Array.from(spaceCells).indexOf(alienStartIndex)
 
 function moveAliensRight() {
-  const newAlienIndex = (alienIndex += 1)
+  const newAlienIndex = alienIndex + 1
   console.log(newAlienIndex)
   const rightAlienBoundary = (alienIndex) => alienIndex % 11 === 0
   if (rightAlienBoundary(alienIndex)) {
     console.log("aliens hit the right grid boundary")
+    clearInterval(rightInterval)
     return
   }
   moveAliens(newAlienIndex)
 }
 
-function moveAliensLeft() {}
-function moveAliensDown() {}
+function moveAliensLeft() {
+  const newAlienIndex = alienIndex - 1
+  console.log(newAlienIndex)
+  const leftAlienBoundary = (alienIndex) =>
+    alienIndex === 0 || alienIndex % 12 === 0
+  if (leftAlienBoundary(alienIndex)) {
+    console.log("aliens hit the left boundary")
+    clearInterval(leftInterval)
+    return
+  }
+  moveAliens(newAlienIndex)
+}
+function moveAliensDown() {
+  const newAlienIndex = alienIndex + spaceRow.length
+  console.log(newAlienIndex)
+
+  moveAliens(newAlienIndex)
+}
 
 function moveAliens(newAlienIndex) {
   spaceCells[alienIndex].classList.remove("alien")
@@ -130,5 +148,15 @@ const startButton = document.querySelector("button")
 startButton.addEventListener("click", startGame)
 
 function startGame() {
-  setInterval(moveAliensRight, 2000)
+  rightInterval = setInterval(moveAliensRight, 2000)
 }
+
+const leftButton = document.querySelector(".left-button")
+leftButton.addEventListener("click", testLeft)
+
+function testLeft() {
+  leftInterval = setInterval(moveAliensLeft, 2000)
+}
+
+const downButton = document.querySelector(".down-button")
+downButton.addEventListener("click", moveAliensDown)

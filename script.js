@@ -1,6 +1,7 @@
 ////////// CONSTRUCTING THE GRID
 let lives = 3
 let score = 0
+let intervalRunning = true
 
 const grid = document.querySelector(".grid")
 
@@ -86,6 +87,9 @@ document.addEventListener("keydown", function (event) {
 ///// INITIALISING THE ALIENS
 let rightInterval
 let leftInterval
+let direction = "right"
+let intervalTime = 1000
+
 const spaceCells = Array.from(allGridCells).filter((cell) =>
   cell.classList.contains("space")
 )
@@ -98,13 +102,16 @@ let alienIndex = Array.from(spaceCells).indexOf(alienStartIndex)
 function moveAliensRight() {
   const newAlienIndex = alienIndex + 1
   console.log(newAlienIndex)
-  const rightAlienBoundary = (alienIndex) => alienIndex % 11 === 0
+  const rightAlienBoundary = (alienIndex) => (alienIndex + 1) % 12 === 0
   if (rightAlienBoundary(alienIndex)) {
-    console.log("aliens hit the right grid boundary")
+    console.log("aliens hit the right boundary")
     clearInterval(rightInterval)
-    return
+    setTimeout(moveAliensDown, 100)
+    direction = "left"
+    switchDirections(direction)
+  } else {
+    moveAliens(newAlienIndex)
   }
-  moveAliens(newAlienIndex)
 }
 
 function moveAliensLeft() {
@@ -115,19 +122,24 @@ function moveAliensLeft() {
   if (leftAlienBoundary(alienIndex)) {
     console.log("aliens hit the left boundary")
     clearInterval(leftInterval)
-    return
+    setTimeout(moveAliensDown, 100)
+    direction = "right"
+    switchDirections(direction)
+  } else {
+    moveAliens(newAlienIndex)
   }
-  moveAliens(newAlienIndex)
 }
 function moveAliensDown() {
   const newAlienIndex = alienIndex + spaceRow.length
   console.log(newAlienIndex)
-  if (newAlienIndex > spaceCells.length) {
+  if (newAlienIndex > spaceCells.length - 1) {
     console.log("Aliens have reached the planet surface!")
     lives--
-    return
+    direction = "stop"
+    switchDirections(direction)
+  } else {
+    moveAliens(newAlienIndex)
   }
-  moveAliens(newAlienIndex)
 }
 
 function moveAliens(newAlienIndex) {
@@ -136,22 +148,23 @@ function moveAliens(newAlienIndex) {
   alienIndex = newAlienIndex
 }
 
+function switchDirections(direction) {
+  if (direction === "left") {
+    leftInterval = setInterval(moveAliensLeft, intervalTime)
+  } else if (direction === "right") {
+    rightInterval = setInterval(moveAliensRight, intervalTime)
+  } else if (direction === "stop") {
+    clearInterval(rightInterval)
+    clearInterval(leftInterval)
+  }
+}
+
 ///// GAME TESTING
+
 const startButton = document.querySelector("button")
 startButton.addEventListener("click", startGame)
 
 function startGame() {
-  rightInterval = setInterval(moveAliensRight, 2000)
-  setTimeout(moveAliensDown, 2000)
-  leftInterval = setInterval(moveAliensLeft, 2000)
+  direction = "right"
+  switchDirections(direction)
 }
-
-const leftButton = document.querySelector(".left-button")
-leftButton.addEventListener("click", testLeft)
-
-function testLeft() {
-  leftInterval = setInterval(moveAliensLeft, 2000)
-}
-
-const downButton = document.querySelector(".down-button")
-downButton.addEventListener("click", moveAliensDown)

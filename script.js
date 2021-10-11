@@ -1,4 +1,6 @@
 ////////// CONSTRUCTING THE GRID
+let lives = 3
+let score = 0
 
 const grid = document.querySelector(".grid")
 
@@ -10,20 +12,7 @@ const cells = []
 
 const spaceRow = Array.from({ length: 12 }).fill("space")
 const playerRow = Array.from({ length: 12 }).fill("player")
-const alienRow = [
-  "space",
-  "space",
-  "space",
-  "space",
-  "space",
-  "space",
-  "alien",
-  "space",
-  "space",
-  "space",
-  "space",
-  "space",
-]
+const barrierRow = Array.from({ length: 12 }).fill("barrier")
 
 const gridMap = spaceRow
   .concat(spaceRow)
@@ -31,7 +20,7 @@ const gridMap = spaceRow
   .concat(spaceRow)
   .concat(spaceRow)
   .concat(spaceRow)
-  .concat(spaceRow)
+  .concat(barrierRow)
   .concat(playerRow)
 
 gridMap.forEach((className, i) => {
@@ -133,7 +122,11 @@ function moveAliensLeft() {
 function moveAliensDown() {
   const newAlienIndex = alienIndex + spaceRow.length
   console.log(newAlienIndex)
-
+  if (newAlienIndex > spaceCells.length) {
+    console.log("Aliens have reached the planet surface!")
+    lives--
+    return
+  }
   moveAliens(newAlienIndex)
 }
 
@@ -149,6 +142,8 @@ startButton.addEventListener("click", startGame)
 
 function startGame() {
   rightInterval = setInterval(moveAliensRight, 2000)
+  setTimeout(moveAliensDown, 2000)
+  leftInterval = setInterval(moveAliensLeft, 2000)
 }
 
 const leftButton = document.querySelector(".left-button")

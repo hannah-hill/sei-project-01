@@ -54,3 +54,8 @@ main {
 .alien {
   background-color: limegreen;
 }
+
+/* -----SHOOT STYLING----- */
+.shoot {
+  background-color: yellow;
+}

@@ -13,7 +13,6 @@ const cells = []
 
 const spaceRow = Array.from({ length: 12 }).fill("space")
 const playerRow = Array.from({ length: 12 }).fill("player")
-const barrierRow = Array.from({ length: 12 }).fill("barrier")
 
 const gridMap = spaceRow
   .concat(spaceRow)
@@ -21,7 +20,7 @@ const gridMap = spaceRow
   .concat(spaceRow)
   .concat(spaceRow)
   .concat(spaceRow)
-  .concat(barrierRow)
+  .concat(spaceRow)
   .concat(playerRow)
 
 gridMap.forEach((className, i) => {
@@ -81,6 +80,9 @@ document.addEventListener("keydown", function (event) {
     case "ArrowRight":
       handleArrowRight()
       break
+    case " ":
+      takeAShot()
+      break
   }
 })
 
@@ -132,9 +134,8 @@ function moveAliensLeft() {
 function moveAliensDown() {
   const newAlienIndex = alienIndex + spaceRow.length
   console.log(newAlienIndex)
-  if (newAlienIndex > spaceCells.length - 1) {
-    console.log("Aliens have reached the planet surface!")
-    lives--
+  if (newAlienIndex >= 72) {
+    console.log("Aliens have reached the planet surface! Game Over!")
     direction = "stop"
     switchDirections(direction)
   } else {
@@ -143,9 +144,14 @@ function moveAliensDown() {
 }
 
 function moveAliens(newAlienIndex) {
-  spaceCells[alienIndex].classList.remove("alien")
-  spaceCells[newAlienIndex].classList.add("alien")
-  alienIndex = newAlienIndex
+  const aliensRemaining = (cell) => cell.classList.contains("alien")
+  if (spaceCells.some(aliensRemaining)) {
+    spaceCells[alienIndex].classList.remove("alien")
+    spaceCells[newAlienIndex].classList.add("alien")
+    alienIndex = newAlienIndex
+  } else {
+    resetAliens()
+  }
 }
 
 function switchDirections(direction) {
@@ -156,6 +162,35 @@ function switchDirections(direction) {
   } else if (direction === "stop") {
     clearInterval(rightInterval)
     clearInterval(leftInterval)
+    setTimeout()
+  }
+}
+
+function resetAliens() {
+  spaceCells[alienStartIndex].classList.add("alien")
+  alienIndex = alienStartIndex
+  direction = "right"
+  switchDirections(direction)
+}
+
+///// SHOOT INVADERS
+let shootIndex = [spaceCells.length - playerIndex]
+let shootInterval
+
+function handleShoot() {
+  console.log("Shots fired!")
+  const newShootIndex = shootIndex - spaceRow.length
+  console.log(newShootIndex)
+  shooting(newShootIndex)
+}
+function shooting(newShootIndex) {
+  if (newShootIndex < 0) {
+    clearInterval(shootInterval)
+    console.log("You missed!")
+  } else {
+    spaceCells[shootIndex].classList.remove("shoot")
+    spaceCells[newShootIndex].classList.add("shoot")
+    shootIndex = newShootIndex
   }
 }
 
@@ -167,4 +202,8 @@ startButton.addEventListener("click", startGame)
 function startGame() {
   direction = "right"
   switchDirections(direction)
+}
+
+function takeAShot() {
+  shootInterval = setInterval(handleShoot, 100)
 }

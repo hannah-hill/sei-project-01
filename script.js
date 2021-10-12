@@ -10,11 +10,7 @@ let playerIndex
 const gridWidth = 12
 const gridHeight = 8
 const cellCount = gridWidth * gridHeight
-console.log(grid)
-const cells = []
 
-// const row = Array.from({ length: 12 }).fill("space")
-// const playerRow = Array.from({ length: 12 }).fill("player")
 const row = Array.from({ length: 12 }).fill("space")
 const gridMap = row
   .concat(row)
@@ -30,28 +26,26 @@ gridMap.forEach((className, i) => {
   grid.appendChild(newCell)
   newCell.classList.add(className, i)
 })
-const allGridCells = Array.from(document.querySelectorAll(".grid div"))
-console.log(allGridCells)
+
+const allCells = Array.from(document.querySelectorAll(".grid div"))
+console.log(allCells)
 
 ////////// INITIALISING THE PLAYER //////////////////////////////////////
 
-const playerStart = allGridCells[allGridCells.length - row.length / 2]
+const playerStart = allCells[allCells.length - row.length / 2]
 playerStart.classList.add("player")
-playerIndex = allGridCells.indexOf(playerStart)
-
-////////// PLAYER MOVEMENT //////////////////////////////////////
+playerIndex = allCells.indexOf(playerStart)
 
 function handleArrowLeft() {
   console.log("handleArrowLeft")
   const leftBoundaryCheck = (playerIndex) =>
-    playerIndex <= allGridCells.length - row.length
+    playerIndex <= allCells.length - row.length
   moveCannon(-1, leftBoundaryCheck)
 }
 
 function handleArrowRight() {
   console.log("handleArrowRight")
-  const rightBoundaryCheck = (playerIndex) =>
-    playerIndex >= allGridCells.length - 1
+  const rightBoundaryCheck = (playerIndex) => playerIndex >= allCells.length - 1
   moveCannon(1, rightBoundaryCheck)
 }
 
@@ -65,126 +59,95 @@ function moveCannon(changeInIndex, boundaryCheck) {
 }
 
 function move(newIndex) {
-  allGridCells[playerIndex].classList.remove("player")
-  allGridCells[newIndex].classList.add("player")
+  allCells[playerIndex].classList.remove("player")
+  allCells[newIndex].classList.add("player")
   playerIndex = newIndex
 }
 
 ///// INITIALISING THE ALIENS //////////////////////////////////////
 
-let rightInterval
-let leftInterval
-let direction = "right"
-let intervalTime = 1000
+let interval
+let alienIndex = 6
+allCells[alienIndex].classList.add("alien")
 
-let alienStart = allGridCells[6]
-alienStart.classList.add("alien")
-let alienIndex = allGridCells.indexOf(alienStart)
+function moveAliens(indexChange) {
+  const newAlienIndex = alienIndex + indexChange
+  const boundaries = (alienIndex) =>
+    (alienIndex + 1) % 12 === 0 || alienIndex === 0 || alienIndex % 12 === 0
 
-function moveAliensRight() {
-  const newAlienIndex = alienIndex + 1
-  console.log("moveAliensRight triggered " + newAlienIndex)
-  const rightAlienBoundary = (alienIndex) => (alienIndex + 1) % 12 === 0
-  if (rightAlienBoundary(alienIndex)) {
-    console.log("aliens hit the right boundary")
-    clearInterval(rightInterval)
-    setTimeout(moveAliensDown, 100)
-    direction = "left"
-    switchDirections(direction)
+  if (boundaries(alienIndex)) {
+    console.log("Aliens hit the boundary.")
+    stopAliens(alienIndex)
+    return
+  }
+  allCells[alienIndex].classList.remove("alien")
+  allCells[newAlienIndex].classList.add("alien")
+  alienIndex = newAlienIndex
+  console.log(alienIndex)
+}
+
+function startAliensRight() {
+  interval = setInterval(function () {
+    moveAliens(1)
+  }, 1000)
+}
+
+function startAliensLeft() {
+  interval = setInterval(function () {
+    moveAliens(-1)
+  }, 1000)
+}
+
+function stopAliens(alienIndex) {
+  console.log("Stopping aliens")
+  clearInterval(interval)
+  if ((alienIndex + 1) % 12 === 0) {
+    startAliensLeft()
   } else {
-    moveAliens(newAlienIndex)
+    startAliensRight()
   }
 }
 
-function moveAliensLeft() {
-  const newAlienIndex = alienIndex - 1
-  console.log("moveAliensLeft triggered " + newAlienIndex)
-  const leftAlienBoundary = (alienIndex) =>
-    alienIndex === 0 || alienIndex % 12 === 0
-  if (leftAlienBoundary(alienIndex)) {
-    console.log("aliens hit the left boundary")
-    clearInterval(leftInterval)
-    setTimeout(moveAliensDown, 100)
-    direction = "right"
-    switchDirections(direction)
-  } else {
-    moveAliens(newAlienIndex)
-  }
-}
+///// BULLET FUNCTIONS //////////////////////////////////////
 
-function moveAliensDown() {
-  const newAlienIndex = alienIndex + row.length
-  console.log("MoveAliensDown triggered " + newAlienIndex)
-  if (newAlienIndex >= 72) {
-    console.log("Aliens have reached the planet surface! Game Over!")
-    direction = "stop"
-    switchDirections(direction)
-  } else {
-    moveAliens(newAlienIndex)
-  }
-}
-
-function moveAliens(newAlienIndex) {
-  const aliensRemaining = (cell) => cell.classList.contains("alien")
-  if (allGridCells.some(aliensRemaining)) {
-    allGridCells[alienIndex].classList.remove("alien")
-    allGridCells[newAlienIndex].classList.add("alien")
-    alienIndex = newAlienIndex
-  } else {
-    resetAliens()
-  }
-}
-
-function switchDirections(direction) {
-  if (direction === "left") {
-    leftInterval = setInterval(moveAliensLeft, intervalTime)
-  } else if (direction === "right") {
-    rightInterval = setInterval(moveAliensRight, intervalTime)
-  } else if (direction === "stop") {
-    clearInterval(rightInterval)
-    clearInterval(leftInterval)
-    setTimeout()
-  }
-}
-
-function resetAliens() {
-  allGridCells[alienStart].classList.add("alien")
-  alienIndex = alienStart
-  direction = "right"
-  switchDirections(direction)
-}
-
-///// bullet INVADERS //////////////////////////////////////
-let bulletIndex = [playerIndex]
+let bulletIndex
 let bulletInterval
 
-function handleBullet() {
-  const newbulletIndex = bulletIndex - row.length
-  console.log(newbulletIndex)
-  moveBullet(newbulletIndex)
+function startBullet() {
+  bulletIndex = playerIndex
+  bulletInterval = setInterval(function () {
+    moveBullet(bulletIndex)
+  }, 100)
 }
 
-function moveBullet(newbulletIndex) {
-  if (newbulletIndex < 0) {
-    clearInterval(bulletInterval)
-    console.log("You missed!")
-    allGridCells[bulletIndex].classList.remove("bullet")
-    bulletIndex = [playerIndex - row.length]
+function moveBullet(bulletIndex) {
+  let newBullet = bulletIndex - row.length
+  console.log(newBullet)
+  if (newBullet <= 0) {
+    stopBullet()
     return
-  } else if (allGridCells[newbulletIndex].classList.contains("alien")) {
-    console.log("Alien terminated.")
-    clearInterval(bulletInterval)
-    allGridCells[newbulletIndex].classList.remove("alien")
-    allGridCells[bulletIndex].classList.remove("bullet")
-    bulletIndex = [playerIndex - row.length]
+  } else if (allCells[bulletIndex].classList.contains("alien")) {
+    killAlien(bulletIndex)
     return
   } else {
-    console.log("Shots fired!")
-    allGridCells[bulletIndex].classList.remove("bullet")
-    allGridCells[newbulletIndex].classList.add("bullet")
-    bulletIndex = newbulletIndex
-    return
+    moveBulletUp(newBullet)
   }
+}
+
+function moveBulletUp(newBullet) {
+  allCells[bulletIndex].classList.remove("bullet")
+  allCells[newBullet].classList.add("bullet")
+  bulletIndex = newBullet
+}
+
+function killAlien(bulletIndex) {
+  allCells[bulletIndex].classList.remove("alien")
+  allCells[bulletIndex].classList.remove("bullet")
+}
+
+function stopBullet() {
+  clearInterval(bulletInterval)
+  allCells[bulletIndex].classList.remove("bullet")
 }
 
 ///// GAME TESTING //////////////////////////////////////
@@ -197,18 +160,9 @@ document.addEventListener("keydown", function (event) {
       handleArrowRight()
       break
     case " ":
-      takeAShot()
+      startBullet()
       break
   }
 })
 
-startButton.addEventListener("click", startGame)
-
-function startGame() {
-  direction = "right"
-  switchDirections(direction)
-}
-
-function takeAShot() {
-  bulletInterval = setInterval(handleBullet, 100)
-}
+startButton.addEventListener("click", startAliensRight)

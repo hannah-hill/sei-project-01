@@ -37,7 +37,7 @@ console.log(allGridCells)
 
 const playerStart = allGridCells[allGridCells.length - row.length / 2]
 playerStart.classList.add("player")
-playerIndex = Array.from(allGridCells).indexOf(playerStart)
+playerIndex = allGridCells.indexOf(playerStart)
 
 ////////// PLAYER MOVEMENT //////////////////////////////////////
 
@@ -79,7 +79,7 @@ let intervalTime = 1000
 
 let alienStart = allGridCells[6]
 alienStart.classList.add("alien")
-let alienIndex = Array.from(allGridCells).indexOf(alienStart)
+let alienIndex = allGridCells.indexOf(alienStart)
 
 function moveAliensRight() {
   const newAlienIndex = alienIndex + 1

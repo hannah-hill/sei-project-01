@@ -65,24 +65,23 @@ function move(newIndex) {
 }
 
 ///// INITIALISING THE ALIENS //////////////////////////////////////
+startButton.addEventListener("click", startAliensRight)
 
 let interval
 let alienIndex = 6
 allCells[alienIndex].classList.add("alien")
 
 function moveAliens(indexChange) {
-  const newAlienIndex = alienIndex + indexChange
   const boundaries = (alienIndex) =>
     (alienIndex + 1) % 12 === 0 || alienIndex === 0 || alienIndex % 12 === 0
-
   if (boundaries(alienIndex)) {
     console.log("Aliens hit the boundary.")
-    stopAliens(alienIndex)
+    stopAliens(indexChange)
     return
   }
   allCells[alienIndex].classList.remove("alien")
-  allCells[newAlienIndex].classList.add("alien")
-  alienIndex = newAlienIndex
+  alienIndex = alienIndex + indexChange
+  allCells[alienIndex].classList.add("alien")
   console.log(alienIndex)
 }
 
@@ -98,12 +97,16 @@ function startAliensLeft() {
   }, 1000)
 }
 
-function stopAliens(alienIndex) {
+function stopAliens(indexChange) {
   console.log("Stopping aliens")
   clearInterval(interval)
-  if ((alienIndex + 1) % 12 === 0) {
+  allCells[alienIndex].classList.remove("alien")
+  alienIndex = alienIndex + row.length
+  allCells[alienIndex].classList.add("alien")
+  console.log("Aliens moved down.")
+  if (indexChange === 1) {
     startAliensLeft()
-  } else {
+  } else if (indexChange === -1) {
     startAliensRight()
   }
 }
@@ -126,8 +129,8 @@ function moveBullet(bulletIndex) {
   if (newBullet <= 0) {
     stopBullet()
     return
-  } else if (allCells[bulletIndex].classList.contains("alien")) {
-    killAlien(bulletIndex)
+  } else if (allCells[newBullet].classList.contains("alien")) {
+    killAlien(newBullet)
     return
   } else {
     moveBulletUp(newBullet)
@@ -140,9 +143,9 @@ function moveBulletUp(newBullet) {
   bulletIndex = newBullet
 }
 
-function killAlien(bulletIndex) {
-  allCells[bulletIndex].classList.remove("alien")
-  allCells[bulletIndex].classList.remove("bullet")
+function killAlien(newBullet) {
+  allCells[newBullet].classList.remove("alien")
+  stopBullet()
 }
 
 function stopBullet() {
@@ -159,10 +162,8 @@ document.addEventListener("keydown", function (event) {
     case "ArrowRight":
       handleArrowRight()
       break
-    case " ":
+    case "z":
       startBullet()
       break
   }
 })
-
-startButton.addEventListener("click", startAliensRight)

@@ -1,9 +1,11 @@
-////////// CONSTRUCTING THE GRID
+const grid = document.querySelector(".grid")
+const startButton = document.querySelector("button")
+
 let lives = 3
 let score = 0
-let intervalRunning = true
+let playerIndex
 
-const grid = document.querySelector(".grid")
+////////// CONSTRUCTING THE GRID
 
 const gridWidth = 12
 const gridHeight = 8
@@ -11,50 +13,45 @@ const cellCount = gridWidth * gridHeight
 console.log(grid)
 const cells = []
 
-const spaceRow = Array.from({ length: 12 }).fill("space")
-const playerRow = Array.from({ length: 12 }).fill("player")
-
-const gridMap = spaceRow
-  .concat(spaceRow)
-  .concat(spaceRow)
-  .concat(spaceRow)
-  .concat(spaceRow)
-  .concat(spaceRow)
-  .concat(spaceRow)
-  .concat(playerRow)
+// const row = Array.from({ length: 12 }).fill("space")
+// const playerRow = Array.from({ length: 12 }).fill("player")
+const row = Array.from({ length: 12 }).fill("space")
+const gridMap = row
+  .concat(row)
+  .concat(row)
+  .concat(row)
+  .concat(row)
+  .concat(row)
+  .concat(row)
+  .concat(row)
 
 gridMap.forEach((className, i) => {
   const newCell = document.createElement("div")
   grid.appendChild(newCell)
-  newCell.classList.add(className)
+  newCell.classList.add(className, i)
 })
-const allGridCells = document.querySelectorAll(".grid div")
+const allGridCells = Array.from(document.querySelectorAll(".grid div"))
 console.log(allGridCells)
 
-////////// INITIALISING THE PLAYER
+////////// INITIALISING THE PLAYER //////////////////////////////////////
 
-const playerCells = Array.from(allGridCells).filter((cell) =>
-  cell.classList.contains("player")
-)
-const playerStartIndex = playerCells[Math.floor(playerCells.length / 2)]
-playerStartIndex.classList.add("active-player")
-console.log(playerCells)
+const playerStart = allGridCells[allGridCells.length - row.length / 2]
+playerStart.classList.add("player")
+playerIndex = Array.from(allGridCells).indexOf(playerStart)
 
-let playerIndex = Array.from(playerCells).indexOf(playerStartIndex)
-
-console.log(playerIndex)
-
-////////// PLAYER MOVEMENT
+////////// PLAYER MOVEMENT //////////////////////////////////////
 
 function handleArrowLeft() {
   console.log("handleArrowLeft")
-  const leftBoundaryCheck = (playerIndex) => playerIndex === 0
+  const leftBoundaryCheck = (playerIndex) =>
+    playerIndex <= allGridCells.length - row.length
   moveCannon(-1, leftBoundaryCheck)
 }
 
 function handleArrowRight() {
   console.log("handleArrowRight")
-  const rightBoundaryCheck = (playerIndex) => playerIndex === 11
+  const rightBoundaryCheck = (playerIndex) =>
+    playerIndex >= allGridCells.length - 1
   moveCannon(1, rightBoundaryCheck)
 }
 
@@ -68,42 +65,25 @@ function moveCannon(changeInIndex, boundaryCheck) {
 }
 
 function move(newIndex) {
-  playerCells[playerIndex].classList.remove("active-player")
-  playerCells[newIndex].classList.add("active-player")
+  allGridCells[playerIndex].classList.remove("player")
+  allGridCells[newIndex].classList.add("player")
   playerIndex = newIndex
 }
-document.addEventListener("keydown", function (event) {
-  switch (event.key) {
-    case "ArrowLeft":
-      handleArrowLeft()
-      break
-    case "ArrowRight":
-      handleArrowRight()
-      break
-    case " ":
-      takeAShot()
-      break
-  }
-})
 
-///// INITIALISING THE ALIENS
+///// INITIALISING THE ALIENS //////////////////////////////////////
+
 let rightInterval
 let leftInterval
 let direction = "right"
 let intervalTime = 1000
 
-const spaceCells = Array.from(allGridCells).filter((cell) =>
-  cell.classList.contains("space")
-)
-console.log(spaceCells)
-
-let alienStartIndex = spaceCells[6]
-alienStartIndex.classList.add("alien")
-let alienIndex = Array.from(spaceCells).indexOf(alienStartIndex)
+let alienStart = allGridCells[6]
+alienStart.classList.add("alien")
+let alienIndex = Array.from(allGridCells).indexOf(alienStart)
 
 function moveAliensRight() {
   const newAlienIndex = alienIndex + 1
-  console.log(newAlienIndex)
+  console.log("moveAliensRight triggered " + newAlienIndex)
   const rightAlienBoundary = (alienIndex) => (alienIndex + 1) % 12 === 0
   if (rightAlienBoundary(alienIndex)) {
     console.log("aliens hit the right boundary")
@@ -118,7 +98,7 @@ function moveAliensRight() {
 
 function moveAliensLeft() {
   const newAlienIndex = alienIndex - 1
-  console.log(newAlienIndex)
+  console.log("moveAliensLeft triggered " + newAlienIndex)
   const leftAlienBoundary = (alienIndex) =>
     alienIndex === 0 || alienIndex % 12 === 0
   if (leftAlienBoundary(alienIndex)) {
@@ -131,9 +111,10 @@ function moveAliensLeft() {
     moveAliens(newAlienIndex)
   }
 }
+
 function moveAliensDown() {
-  const newAlienIndex = alienIndex + spaceRow.length
-  console.log(newAlienIndex)
+  const newAlienIndex = alienIndex + row.length
+  console.log("MoveAliensDown triggered " + newAlienIndex)
   if (newAlienIndex >= 72) {
     console.log("Aliens have reached the planet surface! Game Over!")
     direction = "stop"
@@ -145,9 +126,9 @@ function moveAliensDown() {
 
 function moveAliens(newAlienIndex) {
   const aliensRemaining = (cell) => cell.classList.contains("alien")
-  if (spaceCells.some(aliensRemaining)) {
-    spaceCells[alienIndex].classList.remove("alien")
-    spaceCells[newAlienIndex].classList.add("alien")
+  if (allGridCells.some(aliensRemaining)) {
+    allGridCells[alienIndex].classList.remove("alien")
+    allGridCells[newAlienIndex].classList.add("alien")
     alienIndex = newAlienIndex
   } else {
     resetAliens()
@@ -167,36 +148,60 @@ function switchDirections(direction) {
 }
 
 function resetAliens() {
-  spaceCells[alienStartIndex].classList.add("alien")
-  alienIndex = alienStartIndex
+  allGridCells[alienStart].classList.add("alien")
+  alienIndex = alienStart
   direction = "right"
   switchDirections(direction)
 }
 
-///// SHOOT INVADERS
-let shootIndex = [spaceCells.length - playerIndex]
-let shootInterval
+///// bullet INVADERS //////////////////////////////////////
+let bulletIndex = [playerIndex]
+let bulletInterval
 
-function handleShoot() {
-  console.log("Shots fired!")
-  const newShootIndex = shootIndex - spaceRow.length
-  console.log(newShootIndex)
-  shooting(newShootIndex)
+function handleBullet() {
+  const newbulletIndex = bulletIndex - row.length
+  console.log(newbulletIndex)
+  moveBullet(newbulletIndex)
 }
-function shooting(newShootIndex) {
-  if (newShootIndex < 0) {
-    clearInterval(shootInterval)
+
+function moveBullet(newbulletIndex) {
+  if (newbulletIndex < 0) {
+    clearInterval(bulletInterval)
     console.log("You missed!")
+    allGridCells[bulletIndex].classList.remove("bullet")
+    bulletIndex = [playerIndex - row.length]
+    return
+  } else if (allGridCells[newbulletIndex].classList.contains("alien")) {
+    console.log("Alien terminated.")
+    clearInterval(bulletInterval)
+    allGridCells[newbulletIndex].classList.remove("alien")
+    allGridCells[bulletIndex].classList.remove("bullet")
+    bulletIndex = [playerIndex - row.length]
+    return
   } else {
-    spaceCells[shootIndex].classList.remove("shoot")
-    spaceCells[newShootIndex].classList.add("shoot")
-    shootIndex = newShootIndex
+    console.log("Shots fired!")
+    allGridCells[bulletIndex].classList.remove("bullet")
+    allGridCells[newbulletIndex].classList.add("bullet")
+    bulletIndex = newbulletIndex
+    return
   }
 }
 
-///// GAME TESTING
+///// GAME TESTING //////////////////////////////////////
+document.addEventListener("keydown", function (event) {
+  switch (event.key) {
+    case "ArrowLeft":
+      handleArrowLeft()
+      break
+    case "ArrowRight":
+      handleArrowRight()
+      break
+    case " ":
+      takeAShot()
+      break
+  }
+})
 
-const startButton = document.querySelector("button")
 startButton.addEventListener("click", startGame)
 
 function startGame() {
@@ -205,5 +210,5 @@ function startGame() {
 }
 
 function takeAShot() {
-  shootInterval = setInterval(handleShoot, 100)
+  bulletInterval = setInterval(handleBullet, 100)
 }

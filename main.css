@@ -46,7 +46,7 @@ main {
 }
 
 /* -----PLAYER STYLING----- */
-.active-player {
+.player {
   background-color: fuchsia;
 }
 
@@ -56,6 +56,6 @@ main {
 }
 
 /* -----SHOOT STYLING----- */
-.shoot {
+.bullet {
   background-color: yellow;
 }

@@ -72,12 +72,23 @@ let alienIndex = 6
 allCells[alienIndex].classList.add("alien")
 
 function moveAliens(indexChange) {
-  const boundaries = (alienIndex) =>
-    (alienIndex + 1) % 12 === 0 || alienIndex === 0 || alienIndex % 12 === 0
-  if (boundaries(alienIndex)) {
-    console.log("Aliens hit the boundary.")
-    stopAliens(indexChange)
-    return
+  const rightBoundary = (alienIndex) => (alienIndex + 1) % 12 === 0
+  const leftBoundary = (alienIndex) => alienIndex === 0 || alienIndex % 12 === 0
+  switch (indexChange) {
+    case 1:
+      if (rightBoundary(alienIndex)) {
+        console.log("Aliens hit the boundary.")
+        stopAliens(indexChange)
+        return
+      }
+      break
+    case -1:
+      if (leftBoundary(alienIndex)) {
+        console.log("Aliens hit the boundary.")
+        stopAliens(indexChange)
+        return
+      }
+      break
   }
   allCells[alienIndex].classList.remove("alien")
   alienIndex = alienIndex + indexChange

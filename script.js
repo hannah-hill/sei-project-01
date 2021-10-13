@@ -68,32 +68,45 @@ function move(newIndex) {
 startButton.addEventListener("click", startAliensRight)
 
 let interval
-let alienIndex = 6
-allCells[alienIndex].classList.add("alien")
+let alienIndex = [4, 6, 8, 15, 17, 19]
+alienIndex.forEach((alien) => allCells[alien].classList.add("alien"))
 
 function moveAliens(indexChange) {
   const rightBoundary = (alienIndex) => (alienIndex + 1) % 12 === 0
   const leftBoundary = (alienIndex) => alienIndex === 0 || alienIndex % 12 === 0
   switch (indexChange) {
     case 1:
-      if (rightBoundary(alienIndex)) {
-        console.log("Aliens hit the boundary.")
+      if (alienIndex.some(rightBoundary)) {
         stopAliens(indexChange)
         return
       }
       break
     case -1:
-      if (leftBoundary(alienIndex)) {
-        console.log("Aliens hit the boundary.")
+      if (alienIndex.some(leftBoundary)) {
         stopAliens(indexChange)
         return
       }
       break
   }
-  allCells[alienIndex].classList.remove("alien")
-  alienIndex = alienIndex + indexChange
-  allCells[alienIndex].classList.add("alien")
-  console.log(alienIndex)
+  for (let i = 0; i < alienIndex.length; i++) {
+    allCells[alienIndex[i]].classList.remove("alien")
+    alienIndex[i] = alienIndex[i] + indexChange
+    allCells[alienIndex[i]].classList.add("alien")
+  }
+}
+
+function stopAliens(indexChange) {
+  clearInterval(interval)
+  moveAliensDown()
+  indexChange === 1 ? startAliensLeft() : startAliensRight()
+}
+
+function moveAliensDown() {
+  for (let i = 0; i < alienIndex.length; i++) {
+    allCells[alienIndex[i]].classList.remove("alien")
+    alienIndex[i] = alienIndex[i] + row.length
+    allCells[alienIndex[i]].classList.add("alien")
+  }
 }
 
 function startAliensRight() {
@@ -107,21 +120,6 @@ function startAliensLeft() {
     moveAliens(-1)
   }, 1000)
 }
-
-function stopAliens(indexChange) {
-  console.log("Stopping aliens")
-  clearInterval(interval)
-  allCells[alienIndex].classList.remove("alien")
-  alienIndex = alienIndex + row.length
-  allCells[alienIndex].classList.add("alien")
-  console.log("Aliens moved down.")
-  if (indexChange === 1) {
-    startAliensLeft()
-  } else if (indexChange === -1) {
-    startAliensRight()
-  }
-}
-
 ///// BULLET FUNCTIONS //////////////////////////////////////
 
 let bulletIndex
@@ -156,6 +154,7 @@ function moveBulletUp(newBullet) {
 
 function killAlien(newBullet) {
   allCells[newBullet].classList.remove("alien")
+  alienIndex.splice(alienIndex.indexOf(newBullet), 1)
   stopBullet()
 }
 
@@ -205,6 +204,8 @@ function stopBomb() {
 
 function hitPlayer(newBombIndex) {
   allCells[newBombIndex].classList.remove("player")
+  playerIndex = allCells.indexOf(playerStart)
+  allCells[playerIndex].classList.add("player")
 }
 
 function moveBombDown(newBombIndex) {

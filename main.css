@@ -59,3 +59,8 @@ main {
 .bullet {
   background-color: yellow;
 }
+
+/* -----BOMB STYLING ----- */
+.bomb {
+  background-color: white;
+}

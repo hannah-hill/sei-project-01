@@ -164,6 +164,55 @@ function stopBullet() {
   allCells[bulletIndex].classList.remove("bullet")
 }
 
+///// BOMB FUNCTION //////////////////////////////////////
+startButton.addEventListener("click", startBombing)
+let bombing
+let bombInterval
+let bombIndex
+
+function startBombing() {
+  const randomInterval = Math.floor(Math.random() * (5 - 3)) * 1000
+  bombing = setInterval(startBomb, 5000)
+}
+
+function startBomb() {
+  const randomCell = Math.ceil(Math.random() * 12)
+  bombIndex = randomCell
+  bombInterval = setInterval(function () {
+    dropBomb(bombIndex)
+  }, 500)
+}
+
+function dropBomb(bombIndex) {
+  const newBombIndex = bombIndex + row.length
+  console.log(newBombIndex)
+  if (newBombIndex > allCells.length) {
+    stopBomb()
+    return
+  } else if (allCells[newBombIndex].classList.contains("player")) {
+    stopBomb()
+    hitPlayer(newBombIndex)
+    return
+  } else {
+    moveBombDown(newBombIndex)
+  }
+}
+
+function stopBomb() {
+  clearInterval(bombInterval)
+  allCells[bombIndex].classList.remove("bomb")
+}
+
+function hitPlayer(newBombIndex) {
+  allCells[newBombIndex].classList.remove("player")
+}
+
+function moveBombDown(newBombIndex) {
+  allCells[bombIndex].classList.remove("bomb")
+  allCells[newBombIndex].classList.add("bomb")
+  bombIndex = newBombIndex
+}
+
 ///// GAME TESTING //////////////////////////////////////
 document.addEventListener("keydown", function (event) {
   switch (event.key) {

@@ -26,10 +26,10 @@ main {
 /* -----GRID SYLING----- */
 .grid {
   border: 1px solid limegreen;
-  height: 400px;
-  width: 600px;
+  height: 440px;
+  width: 760px;
   display: grid;
-  grid-template-columns: repeat(15, 1fr);
+  grid-template-columns: repeat(19, 1fr);
   gap: 0px;
   margin: 20px auto;
 }
@@ -37,7 +37,6 @@ main {
   border: none;
   height: 40px;
   width: 40px;
-  border: 1px solid white;
 }
 
 /* -----SCOREBOARD STYLING----- */
@@ -163,7 +162,14 @@ main {
   font-size: 20px;
   font-weight: bold;
   font-family: monospace;
+  padding: 10px 30px;
 }
 .start:hover {
   cursor: pointer;
+}
+.final-score {
+  font-family: "VT323", monospace;
+  color: white;
+  font-size: 40px;
+  line-height: 1;
 }

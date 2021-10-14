@@ -1,10 +1,19 @@
 const grid = document.querySelector(".grid")
-const startButton = document.querySelector("button")
+const startButton = document.querySelector(".start")
+const scoreSpan = document.querySelector(".score span")
+const livesImages = document.querySelector(".lives-container")
+const finalScore = document.querySelector(".final-score")
+const playAgain = document.querySelector(".play-again")
+const oneLIfe = document.querySelector("#one-life")
+const twoLives = document.querySelector("#two-lives")
+const threeLives = document.querySelector("#three-lives")
+const gameOverPopup = document.querySelector(".gameover-container")
 
 let lives = 3
 let score = 0
 let playerIndex
 
+scoreSpan.innerHTML = score
 ////////// CONSTRUCTING THE GRID
 
 const gridWidth = 12
@@ -156,6 +165,8 @@ function killAlien(newBullet) {
   allCells[newBullet].classList.remove("alien")
   alienIndex.splice(alienIndex.indexOf(newBullet), 1)
   stopBullet()
+  score += 30
+  scoreSpan.innerHTML = score
 }
 
 function stopBullet() {
@@ -206,12 +217,34 @@ function hitPlayer(newBombIndex) {
   allCells[newBombIndex].classList.remove("player")
   playerIndex = allCells.indexOf(playerStart)
   allCells[playerIndex].classList.add("player")
+  lives--
+  loseLife()
 }
 
 function moveBombDown(newBombIndex) {
   allCells[bombIndex].classList.remove("bomb")
   allCells[newBombIndex].classList.add("bomb")
   bombIndex = newBombIndex
+}
+
+function loseLife() {
+  if (lives === 2) {
+    threeLives.classList.add("hidden")
+  } else if (lives === 1) {
+    twoLives.classList.add("hidden")
+  } else if (lives === 0) {
+    gameOver()
+  }
+}
+
+///// GAME OVER FUNCTION //////////////////////////////////////
+playAgain.addEventListener("click", () => document.location.reload())
+
+function gameOver() {
+  clearInterval(interval)
+  clearInterval(bombing)
+  gameOverPopup.classList.remove("hidden")
+  finalScore.innerHTML = score
 }
 
 ///// GAME TESTING //////////////////////////////////////

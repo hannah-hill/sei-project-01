@@ -44,23 +44,69 @@ main {
   padding: 20px;
   font-size: 20px;
 }
+.score,
+.lives {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  align-items: center;
+}
+.lives {
+  gap: 20px;
+}
+.lives-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.lives-container img {
+  height: 50px;
+}
 
 /* -----PLAYER STYLING----- */
 .player {
-  background-color: fuchsia;
+  background: url("./images/ship_J.png");
+  background-size: cover;
 }
 
 /* -----ALIEN STYLING----- */
 .alien {
-  background-color: limegreen;
+  background: url("./images/enemy_C.png");
+  background-size: cover;
 }
 
 /* -----SHOOT STYLING----- */
 .bullet {
-  background-color: yellow;
+  background: url("./images/effect_yellow.png");
+  background-size: cover;
 }
 
 /* -----BOMB STYLING ----- */
 .bomb {
   background-color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+/* -----GAME OVER STYLING----- */
+.gameover-container {
+  position: fixed;
+  top: 150px;
+  z-index: 500;
+  width: 100%;
+  height: 300px;
+}
+.gameover {
+  width: 40%;
+  height: 100%;
+  z-index: 600;
+  background-color: black;
+  border: 1px solid limegreen;
+  position: relative;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 30px;
 }

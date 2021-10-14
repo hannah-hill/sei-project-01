@@ -15,15 +15,27 @@
       <div class="grid"></div>
       <div class="scoreboard">
         <div class="score">
-          <p>Score :<span> 0</span></p>
+          <p>Score : <span></span></p>
         </div>
         <div class="lives">
           <p>Lives :</p>
-          <div class="lives-container"></div>
+          <div class="lives-container">
+            <img src="./images/ship_J.png" alt="ship-one" id="one-life" />
+            <img src="./images/ship_J.png" alt="ship-two" id="two-lives" />
+            <img src="./images/ship_J.png" alt="ship-three" id="three-lives" />
+          </div>
         </div>
       </div>
     </main>
-    <button>Start Game</button>
+    <button class="start">Start Game</button>
+    <div class="gameover-container hidden">
+      <div class="gameover">
+        <p>GAME OVER</p>
+        <p>FINAL SCORE :</p>
+        <p class="final-score"></p>
+        <button class="play-again">PLAY AGAIN</button>
+      </div>
+    </div>
     <script src="script.js" charset="utf-8"></script>
   </body>
 </html>

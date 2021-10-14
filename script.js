@@ -1,5 +1,7 @@
 const grid = document.querySelector(".grid")
+const main = document.querySelector("main")
 const startButton = document.querySelector(".start")
+const startContainer = document.querySelector(".start-game-container")
 const scoreSpan = document.querySelector(".score span")
 const livesImages = document.querySelector(".lives-container")
 const levelSpan = document.querySelector(".level span")
@@ -17,14 +19,23 @@ let playerIndex
 
 scoreSpan.innerHTML = score
 levelSpan.innerHTML = level
+
+startButton.addEventListener("click", () => {
+  startContainer.classList.add("hidden")
+  main.classList.remove("hidden")
+  startAliensRight()
+})
+
 ////////// CONSTRUCTING THE GRID
 
-const gridWidth = 12
-const gridHeight = 8
+const gridWidth = 15
+const gridHeight = 10
 const cellCount = gridWidth * gridHeight
 
-const row = Array.from({ length: 12 }).fill("space")
+const row = Array.from({ length: 15 }).fill("space")
 const gridMap = row
+  .concat(row)
+  .concat(row)
   .concat(row)
   .concat(row)
   .concat(row)
@@ -44,7 +55,7 @@ console.log(allCells)
 
 ////////// INITIALISING THE PLAYER //////////////////////////////////////
 
-const playerStart = allCells[allCells.length - row.length / 2]
+const playerStart = allCells[142]
 playerStart.classList.add("player")
 playerIndex = allCells.indexOf(playerStart)
 
@@ -77,17 +88,16 @@ function move(newIndex) {
 }
 
 ///// INITIALISING THE ALIENS //////////////////////////////////////
-startButton.addEventListener("click", startAliensRight)
 
 let interval
 let intervalSpeed = 1000
-const alienStart = [4, 6, 8, 15, 17, 19]
-let alienIndex = [4, 6, 8, 15, 17, 19]
+const alienStart = [3, 5, 7, 9, 11, 17, 19, 21, 23, 25, 27, 33, 35, 37, 39, 41]
+let alienIndex = [3, 5, 7, 9, 11, 17, 19, 21, 23, 25, 27, 33, 35, 37, 39, 41]
 alienIndex.forEach((alien) => allCells[alien].classList.add("alien"))
 
 function moveAliens(indexChange) {
-  const rightBoundary = (alienIndex) => (alienIndex + 1) % 12 === 0
-  const leftBoundary = (alienIndex) => alienIndex === 0 || alienIndex % 12 === 0
+  const rightBoundary = (alienIndex) => (alienIndex + 1) % 15 === 0
+  const leftBoundary = (alienIndex) => alienIndex === 0 || alienIndex % 15 === 0
   switch (indexChange) {
     case 1:
       if (alienIndex.some(rightBoundary)) {
@@ -121,6 +131,10 @@ function moveAliensDown() {
     alienIndex[i] = alienIndex[i] + row.length
     allCells[alienIndex[i]].classList.add("alien")
   }
+  if (alienIndex.some((alien) => alien > 134)) {
+    gameOver()
+    return
+  }
 }
 
 function startAliensRight() {
@@ -135,11 +149,14 @@ function startAliensLeft() {
   }, intervalSpeed)
 }
 ///// BULLET FUNCTIONS //////////////////////////////////////
-
+let newBullet
 let bulletIndex
 let bulletInterval
 
 function startBullet() {
+  if (allCells.some((cell) => cell.classList.contains("bullet"))) {
+    return
+  }
   bulletIndex = playerIndex
   bulletInterval = setInterval(function () {
     moveBullet(bulletIndex)
@@ -147,7 +164,7 @@ function startBullet() {
 }
 
 function moveBullet(bulletIndex) {
-  let newBullet = bulletIndex - row.length
+  newBullet = bulletIndex - row.length
   console.log(newBullet)
   if (newBullet <= 0) {
     stopBullet()
@@ -166,6 +183,11 @@ function moveBulletUp(newBullet) {
   bulletIndex = newBullet
 }
 
+function stopBullet() {
+  clearInterval(bulletInterval)
+  allCells[bulletIndex].classList.remove("bullet")
+}
+
 function killAlien(newBullet) {
   allCells[newBullet].classList.remove("alien")
   alienIndex.splice(alienIndex.indexOf(newBullet), 1)
@@ -174,20 +196,16 @@ function killAlien(newBullet) {
   scoreSpan.innerHTML = score
   if (!allCells.some((cell) => cell.classList.contains("alien"))) {
     level++
-    newAlienWave(level)
+    newAlienWave()
     levelSpan.innerHTML = level
   }
 }
 
-function stopBullet() {
-  clearInterval(bulletInterval)
-  allCells[bulletIndex].classList.remove("bullet")
-}
-
-function newAlienWave(level) {
+function newAlienWave() {
   clearInterval(interval)
   clearInterval(bombing)
-  intervalSpeed = intervalSpeed * 0.75
+  clearInterval(bulletInterval)
+  intervalSpeed = intervalSpeed * 0.8
   alienIndex = alienStart
   startAliensRight()
 }
@@ -200,7 +218,7 @@ let bombIndex
 
 function startBombing() {
   const randomInterval = Math.floor(Math.random() * (5 - 3)) * 1000
-  bombing = setInterval(startBomb, 5000)
+  bombing = setInterval(startBomb, 3000)
 }
 
 function startBomb() {
@@ -208,7 +226,7 @@ function startBomb() {
   bombIndex = randomCell
   bombInterval = setInterval(function () {
     dropBomb(bombIndex)
-  }, 300)
+  }, 200)
 }
 
 function dropBomb(bombIndex) {
@@ -221,6 +239,9 @@ function dropBomb(bombIndex) {
     stopBomb()
     hitPlayer(newBombIndex)
     return
+  } else if (allCells[newBombIndex].classList.contains("blockade")) {
+    stopBomb()
+    hitBlockade(newBombIndex)
   } else {
     moveBombDown(newBombIndex)
   }
@@ -255,6 +276,21 @@ function loseLife() {
   }
 }
 
+///// BLOCKADES //////////////////////////////////////
+const blockades = [122, 123, 126, 127, 128, 131, 132]
+blockades.forEach((cell) => allCells[cell].classList.add("blockade"))
+blockades.forEach((cell) => allCells[cell].classList.add("undamaged"))
+
+function hitBlockade(index) {
+  if (allCells[index].classList.contains("undamaged")) {
+    allCells[index].classList.remove("undamaged")
+    allCells[index].classList.add("damaged")
+  } else if (allCells[index].classList.contains("damaged")) {
+    allCells[index].classList.remove("damaged")
+    allCells[index].classList.remove("blockade")
+  }
+}
+
 ///// GAME OVER FUNCTION //////////////////////////////////////
 playAgain.addEventListener("click", () => document.location.reload())
 
@@ -274,7 +310,7 @@ document.addEventListener("keydown", function (event) {
     case "ArrowRight":
       handleArrowRight()
       break
-    case "z":
+    case " ":
       startBullet()
       break
   }

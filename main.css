@@ -6,7 +6,8 @@ header {
   height: 100px;
 }
 body {
-  background-color: black;
+  background: url("./images/jeremy-perkins-uhjiu8FjnsQ-unsplash.jpg");
+  background-size: cover;
   color: limegreen;
   font-family: monospace;
 }
@@ -25,14 +26,13 @@ main {
   height: 400px;
   width: 600px;
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-
+  grid-template-columns: repeat(15, 1fr);
   gap: 0px;
 }
 .grid div {
-  border: 1px solid white;
-  height: 50px;
-  width: 50px;
+  border: none;
+  height: 40px;
+  width: 40px;
 }
 .scoreboard {
   border: 2px solid white;
@@ -62,7 +62,7 @@ main {
   gap: 10px;
 }
 .lives-container img {
-  height: 50px;
+  height: 40px;
 }
 
 /* -----PLAYER STYLING----- */
@@ -83,6 +83,11 @@ main {
   background-size: cover;
 }
 
+.terminated {
+  background: url("./images/icon_crossSmall.png");
+  background-size: cover;
+}
+
 /* -----BOMB STYLING ----- */
 .bomb {
   background: url("./images/meteor_squareDetailedSmall.png");
@@ -93,8 +98,19 @@ main {
   display: none;
 }
 
+/* -----BLOCAKDE STYLING----- */
+
+.undamaged {
+  background-image: url("./images/icon_crossLarge.png");
+  background-size: cover;
+}
+.damaged {
+  background-image: url("./images/icon_crossSmall.png");
+  background-size: cover;
+}
 /* -----GAME OVER STYLING----- */
-.gameover-container {
+.gameover-container,
+.start-game-container {
   position: fixed;
   top: 150px;
   z-index: 500;
@@ -111,4 +127,28 @@ main {
   margin: 0 auto;
   text-align: center;
   font-size: 30px;
+}
+.start-game {
+  width: 40%;
+  height: 100%;
+  z-index: 600;
+  background-color: black;
+  border: 1px solid limegreen;
+  position: relative;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.start {
+  border: 1px solid limegreen;
+  background: none;
+  color: white;
+  text-transform: uppercase;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: monospace;
+}
+.start:hover {
+  cursor: pointer;
 }

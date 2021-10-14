@@ -11,7 +11,20 @@
     <h1>Space Invaders</h1>
   </header>
   <body>
-    <main>
+    <div class="start-game-container">
+      <div class="start-game">
+        <h2>HOW TO PLAY</h2>
+        <p>
+          Welcome to space invaders! <br />
+          To play, use the L/R arrow keys to move the ship, and the spacebar to
+          shoot the incoming aliens! <br />
+          Every alien terminated is 30 points, but make sure you get them all
+          before they reach the planet surface!
+        </p>
+        <button class="start">Start Game</button>
+      </div>
+    </div>
+    <main class="hidden">
       <div class="grid"></div>
       <div class="scoreboard">
         <div class="score">
@@ -30,7 +43,7 @@
         </div>
       </div>
     </main>
-    <button class="start">Start Game</button>
+
     <div class="gameover-container hidden">
       <div class="gameover">
         <p>GAME OVER</p>

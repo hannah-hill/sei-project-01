@@ -11,6 +11,9 @@ const threeLives = document.querySelector("#three-lives")
 const gameOverPopup = document.querySelector(".gameover-container")
 const finalScore = document.querySelector(".final-score")
 const playAgain = document.querySelector(".play-again")
+const bulletAudio = document.querySelector(".bullet-audio")
+const bombAudio = document.querySelector(".bomb-audio")
+const gameoverAudio = document.querySelector(".gameover-audio")
 
 let lives = 3
 let score = 0
@@ -92,7 +95,7 @@ function move(newIndex) {
 let interval
 let intervalSpeed = 1000
 const alienStart = [3, 5, 7, 9, 11, 17, 19, 21, 23, 25, 27, 33, 35, 37, 39, 41]
-let alienIndex = [3, 5, 7, 9, 11, 17, 19, 21, 23, 25, 27, 33, 35, 37, 39, 41]
+let alienIndex = Array.from(alienStart)
 alienIndex.forEach((alien) => allCells[alien].classList.add("alien"))
 
 function moveAliens(indexChange) {
@@ -158,6 +161,7 @@ function startBullet() {
     return
   }
   bulletIndex = playerIndex
+  bulletAudio.play()
   bulletInterval = setInterval(function () {
     moveBullet(bulletIndex)
   }, 100)
@@ -206,7 +210,7 @@ function newAlienWave() {
   clearInterval(bombing)
   clearInterval(bulletInterval)
   intervalSpeed = intervalSpeed * 0.8
-  alienIndex = alienStart
+  alienIndex = Array.from(alienStart)
   startAliensRight()
 }
 
@@ -224,6 +228,7 @@ function startBombing() {
 function startBomb() {
   const randomCell = Math.ceil(Math.random() * 12)
   bombIndex = randomCell
+  bombAudio.play()
   bombInterval = setInterval(function () {
     dropBomb(bombIndex)
   }, 200)
@@ -297,6 +302,7 @@ playAgain.addEventListener("click", () => document.location.reload())
 function gameOver() {
   clearInterval(interval)
   clearInterval(bombing)
+  gameoverAudio.play()
   gameOverPopup.classList.remove("hidden")
   finalScore.innerHTML = score
 }

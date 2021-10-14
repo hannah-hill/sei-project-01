@@ -16,8 +16,8 @@
         <h2>HOW TO PLAY</h2>
         <p>
           Welcome to space invaders! <br />
-          To play, use the L/R arrow keys to move the ship, and the spacebar to
-          shoot the incoming aliens! <br />
+          Use the L/R arrow keys to move the ship, and the spacebar to shoot the
+          incoming aliens! <br />
           Every alien terminated is 30 points, but make sure you get them all
           before they reach the planet surface!
         </p>
@@ -25,7 +25,16 @@
       </div>
     </div>
     <main class="hidden">
-      <div class="grid"></div>
+      <div class="grid">
+        <audio
+          src="./audio/mixkit-short-laser-gun-shot-1670.wav"
+          class="bullet-audio"
+        ></audio>
+        <audio
+          src="./audio/mixkit-falling-hit-757.wav"
+          class="bomb-audio"
+        ></audio>
+      </div>
       <div class="scoreboard">
         <div class="score">
           <p>Score : <span></span></p>
@@ -43,9 +52,12 @@
         </div>
       </div>
     </main>
-
     <div class="gameover-container hidden">
       <div class="gameover">
+        <audio
+          src="./audio/mixkit-arcade-retro-game-over-213.wav"
+          class="gameover-audio"
+        ></audio>
         <p>GAME OVER</p>
         <p>FINAL SCORE :</p>
         <p class="final-score"></p>

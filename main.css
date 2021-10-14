@@ -1,9 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap");
 * {
   box-sizing: border-box;
 }
 header {
   text-align: center;
   height: 100px;
+  font-family: "VT323", monospace;
+  padding: 20px;
+  margin: 20px;
+}
+h1 {
+  font-size: 60px;
 }
 body {
   background: url("./images/jeremy-perkins-uhjiu8FjnsQ-unsplash.jpg");
@@ -17,12 +24,14 @@ main {
   display: flex;
   align-items: flex-start;
   justify-content: space-around;
+  margin-top: 100px;
   margin-bottom: 100px;
+  font-family: "Share Tech Mono", monospace;
 }
 
 /* -----GRID SYLING----- */
 .grid {
-  border: 1px solid white;
+  border: none;
   height: 400px;
   width: 600px;
   display: grid;
@@ -112,10 +121,10 @@ main {
 .gameover-container,
 .start-game-container {
   position: fixed;
-  top: 150px;
+  top: 200px;
   z-index: 500;
   width: 100%;
-  height: 300px;
+  height: 350px;
 }
 .gameover {
   width: 40%;
@@ -128,6 +137,7 @@ main {
   text-align: center;
   font-size: 30px;
 }
+
 .start-game {
   width: 40%;
   height: 100%;
@@ -139,8 +149,10 @@ main {
   text-align: center;
   font-size: 16px;
   line-height: 1.6;
+  padding: 20px;
 }
-.start {
+.start,
+.play-again {
   border: 1px solid limegreen;
   background: none;
   color: white;

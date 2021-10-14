@@ -4,10 +4,8 @@
 }
 header {
   text-align: center;
-  height: 100px;
+  height: 80px;
   font-family: "VT323", monospace;
-  padding: 20px;
-  margin: 20px;
 }
 h1 {
   font-size: 60px;
@@ -21,54 +19,59 @@ body {
 
 /* -----MAIN STYLING - FLEXBOX CONTAINER----- */
 main {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-around;
-  margin-top: 100px;
-  margin-bottom: 100px;
+  margin-bottom: 10px;
   font-family: "Share Tech Mono", monospace;
 }
 
 /* -----GRID SYLING----- */
 .grid {
-  border: none;
+  border: 1px solid limegreen;
   height: 400px;
   width: 600px;
   display: grid;
   grid-template-columns: repeat(15, 1fr);
   gap: 0px;
+  margin: 20px auto;
 }
 .grid div {
   border: none;
   height: 40px;
   width: 40px;
+  border: 1px solid white;
 }
+
+/* -----SCOREBOARD STYLING----- */
 .scoreboard {
-  border: 2px solid white;
-  height: 300px;
-  width: 400px;
+  height: 50px;
+  width: 900px;
+  margin: 0 auto;
   display: flex;
-  flex-flow: column;
-  align-items: flex-start;
-  padding: 20px;
+  align-items: center;
+  justify-content: space-between;
   font-size: 20px;
 }
 .score,
-.lives,
 .level {
-  width: 100%;
-  height: 90px;
-  display: flex;
-  align-items: center;
+  width: 30%;
+  height: 160%;
+}
+.score h2,
+.level h2 {
+  text-align: center;
 }
 .lives {
-  gap: 20px;
+  width: 30%;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }
+
 .lives-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  width: 50%;
 }
 .lives-container img {
   height: 40px;
@@ -117,7 +120,7 @@ main {
   background-image: url("./images/icon_crossSmall.png");
   background-size: cover;
 }
-/* -----GAME OVER STYLING----- */
+/* -----GAME OVER & START POPUP STYLING----- */
 .gameover-container,
 .start-game-container {
   position: fixed;

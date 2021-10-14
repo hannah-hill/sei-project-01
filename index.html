@@ -11,7 +11,7 @@
     <h1>Space Invaders</h1>
   </header>
   <body>
-    <div class="start-game-container">
+    <div class="start-game-container hidden">
       <div class="start-game">
         <h2>HOW TO PLAY</h2>
         <p>
@@ -24,7 +24,23 @@
         <button class="start">Start Game</button>
       </div>
     </div>
-    <main class="hidden">
+    <main class="">
+      <div class="scoreboard">
+        <div class="score">
+          <h2>Score : <span></span></h2>
+        </div>
+        <div class="lives">
+          <h2>Lives :</h2>
+          <div class="lives-container">
+            <img src="./images/ship_J.png" alt="ship-one" id="one-life" />
+            <img src="./images/ship_J.png" alt="ship-two" id="two-lives" />
+            <img src="./images/ship_J.png" alt="ship-three" id="three-lives" />
+          </div>
+        </div>
+        <div class="level">
+          <h2>Level : <span></span></h2>
+        </div>
+      </div>
       <div class="grid">
         <audio
           src="./audio/mixkit-short-laser-gun-shot-1670.wav"
@@ -34,22 +50,6 @@
           src="./audio/mixkit-falling-hit-757.wav"
           class="bomb-audio"
         ></audio>
-      </div>
-      <div class="scoreboard">
-        <div class="score">
-          <p>Score : <span></span></p>
-        </div>
-        <div class="level">
-          <p>Level : <span></span></p>
-        </div>
-        <div class="lives">
-          <p>Lives :</p>
-          <div class="lives-container">
-            <img src="./images/ship_J.png" alt="ship-one" id="one-life" />
-            <img src="./images/ship_J.png" alt="ship-two" id="two-lives" />
-            <img src="./images/ship_J.png" alt="ship-three" id="three-lives" />
-          </div>
-        </div>
       </div>
     </main>
     <div class="gameover-container hidden">

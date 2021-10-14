@@ -36,18 +36,19 @@ main {
 }
 .scoreboard {
   border: 2px solid white;
-  height: 200px;
+  height: 300px;
   width: 400px;
   display: flex;
-  flex-flow: wrap column;
+  flex-flow: column;
   align-items: flex-start;
   padding: 20px;
   font-size: 20px;
 }
 .score,
-.lives {
+.lives,
+.level {
   width: 100%;
-  height: 50%;
+  height: 90px;
   display: flex;
   align-items: center;
 }

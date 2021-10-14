@@ -2,18 +2,21 @@ const grid = document.querySelector(".grid")
 const startButton = document.querySelector(".start")
 const scoreSpan = document.querySelector(".score span")
 const livesImages = document.querySelector(".lives-container")
-const finalScore = document.querySelector(".final-score")
-const playAgain = document.querySelector(".play-again")
+const levelSpan = document.querySelector(".level span")
 const oneLIfe = document.querySelector("#one-life")
 const twoLives = document.querySelector("#two-lives")
 const threeLives = document.querySelector("#three-lives")
 const gameOverPopup = document.querySelector(".gameover-container")
+const finalScore = document.querySelector(".final-score")
+const playAgain = document.querySelector(".play-again")
 
 let lives = 3
 let score = 0
+let level = 1
 let playerIndex
 
 scoreSpan.innerHTML = score
+levelSpan.innerHTML = level
 ////////// CONSTRUCTING THE GRID
 
 const gridWidth = 12
@@ -77,6 +80,7 @@ function move(newIndex) {
 startButton.addEventListener("click", startAliensRight)
 
 let interval
+const alienStart = [4, 6, 8, 15, 17, 19]
 let alienIndex = [4, 6, 8, 15, 17, 19]
 alienIndex.forEach((alien) => allCells[alien].classList.add("alien"))
 
@@ -167,11 +171,23 @@ function killAlien(newBullet) {
   stopBullet()
   score += 30
   scoreSpan.innerHTML = score
+  if (!allCells.some((cell) => cell.classList.contains("alien"))) {
+    level++
+    newAlienWave(level)
+    levelSpan.innerHTML = level
+  }
 }
 
 function stopBullet() {
   clearInterval(bulletInterval)
   allCells[bulletIndex].classList.remove("bullet")
+}
+
+function newAlienWave(level) {
+  clearInterval(interval)
+  clearInterval(bombing)
+  alienIndex = alienStart
+  startAliensRight()
 }
 
 ///// BOMB FUNCTION //////////////////////////////////////

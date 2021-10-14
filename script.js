@@ -80,6 +80,7 @@ function move(newIndex) {
 startButton.addEventListener("click", startAliensRight)
 
 let interval
+let intervalSpeed = 1000
 const alienStart = [4, 6, 8, 15, 17, 19]
 let alienIndex = [4, 6, 8, 15, 17, 19]
 alienIndex.forEach((alien) => allCells[alien].classList.add("alien"))
@@ -125,13 +126,13 @@ function moveAliensDown() {
 function startAliensRight() {
   interval = setInterval(function () {
     moveAliens(1)
-  }, 1000)
+  }, intervalSpeed)
 }
 
 function startAliensLeft() {
   interval = setInterval(function () {
     moveAliens(-1)
-  }, 1000)
+  }, intervalSpeed)
 }
 ///// BULLET FUNCTIONS //////////////////////////////////////
 
@@ -186,6 +187,7 @@ function stopBullet() {
 function newAlienWave(level) {
   clearInterval(interval)
   clearInterval(bombing)
+  intervalSpeed = intervalSpeed * 0.75
   alienIndex = alienStart
   startAliensRight()
 }
@@ -206,7 +208,7 @@ function startBomb() {
   bombIndex = randomCell
   bombInterval = setInterval(function () {
     dropBomb(bombIndex)
-  }, 500)
+  }, 300)
 }
 
 function dropBomb(bombIndex) {

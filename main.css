@@ -85,7 +85,8 @@ main {
 
 /* -----BOMB STYLING ----- */
 .bomb {
-  background-color: white;
+  background: url("./images/meteor_squareDetailedSmall.png");
+  background-size: cover;
 }
 
 .hidden {

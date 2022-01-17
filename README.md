@@ -1,9 +1,5 @@
 # SPACE INVADERS - GA PROJECT 01
 
-## <a name='overview'>OVERVIEW</a>
-
-This is my first dev project for the General Assembly Software Engineering Immersive course, and my first ever programming project.
-
 ![space invaders screenshot](images/readme_images/image1.png)
 
 ### TABLE OF CONTENTS
@@ -20,6 +16,10 @@ This is my first dev project for the General Assembly Software Engineering Immer
 - [Bugs & Known Errors](#bugs)
 - [Future Improvements](#improvements)
 - [Key Learnings](#learnings)
+
+## <a name='overview'>OVERVIEW</a>
+
+This is my first dev project for the General Assembly Software Engineering Immersive course, and my first ever programming project.
 
 ### <a name='technologies'>TECHNOLOGIES USED</a>
 

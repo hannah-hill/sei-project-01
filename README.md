@@ -12,7 +12,6 @@ This is my first dev project for the General Assembly Software Engineering Immer
   - [Technologies Used](#technologies)
   - [Deployment](#deployment)
   - [Gameplay](#gameplay)
-  - [Brief](#brief)
 - [Development Process](#dev-process)
   - [Planning](#planning)
   - [Reaching MVP](#mvp)
@@ -31,7 +30,7 @@ This is my first dev project for the General Assembly Software Engineering Immer
 
 ### <a name='deployment'>DEPLOYMENT</a>
 
-This project is deployed with GitHub Pages and is available [here](https://hannah-hill.github.io/space-invaders/).
+This project is deployed with GitHub Pages and is available [here](https://hannah-hill.github.io/sei-project-01/).
 
 ### <a name='gameplay'>GAMEPLAY</a>
 
@@ -40,8 +39,6 @@ Space Invaders is a classic arcade game from the 80s. The player aims to shoot a
 The player can only move left or right. The aliens also move from left to right, and also down each time they reach the side of the screen. The aliens also periodically drop bombs towards the player. Once the player has destroyed a wave of aliens, the game starts again. The aim is to achieve the highest score possible before either being destroyed by the aliens, or allowing them to reach the planet's surface.
 
 My iteration pays homage to the original Space Invaders game, with arcade-esque styling that sparks nostalgia for players.
-
-### <a name='brief'>BRIEF</a>
 
 ## <a name='dev-process'>DEVELOPMENT PROCESS</a>
 

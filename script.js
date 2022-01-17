@@ -88,7 +88,7 @@ function move(newIndex) {
   playerIndex = newIndex
 }
 
-///// INITIALISING THE ALIENS //////////////////////////////////////
+///// ALIENS //////////////////////////////////////
 
 let interval
 let intervalSpeed = 1000
@@ -96,6 +96,7 @@ const alienStart = [
   3, 5, 7, 9, 11, 13, 15, 23, 25, 27, 29, 31, 33, 41, 43, 45, 47, 49, 51, 53,
   61, 63, 65, 67, 69, 71,
 ]
+// const alienStart = [5, 7, 9, 11, 13]
 let alienIndex = Array.from(alienStart)
 alienIndex.forEach((alien) => allCells[alien].classList.add("alien"))
 
@@ -306,7 +307,7 @@ function gameOver() {
   finalScore.innerHTML = score
 }
 
-///// GAME TESTING //////////////////////////////////////
+///// EVENT LISTENERS //////////////////////////////////////
 document.addEventListener("keydown", function (event) {
   switch (event.key) {
     case "ArrowLeft":
